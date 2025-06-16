@@ -1,33 +1,31 @@
-import { HfInference } from '@huggingface/inference'
-import { HuggingFaceStream, StreamingTextResponse } from 'ai'
-import { experimental_buildOpenAssistantPrompt } from 'ai/prompts'
+// /app/api/chat/route.ts
 
-// Create a new HuggingFace Inference instance
-const Hf = new HfInference(process.env.HUGGINGFACE_API_KEY)
-
-// IMPORTANT! Set the runtime to edge
 export const runtime = 'edge'
 
 export async function POST(req: Request) {
-  // Extract the `messages` from the body of the request
   const { messages } = await req.json()
 
-  const response = Hf.textGenerationStream({
-    model: 'OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5',
-    inputs: experimental_buildOpenAssistantPrompt(messages),
-    parameters: {
-      max_new_tokens: 1024,
-      // @ts-ignore (this is a valid parameter specifically in OpenAssistant models)
-      typical_p: 0.2,
-      repetition_penalty: 1,
-      truncate: 1000,
-      return_full_text: false
-    }
+  // Format messages into one prompt
+  const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n')
+
+  // Send the prompt to your Hugging Face Space
+  const response = await fetch('https://mirxakamran893-codexmknew.hf.space/predict', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`
+    },
+    body: JSON.stringify({ data: [prompt] })  // Gradio API expects `data` as array
   })
 
-  // Convert the response into a friendly text-stream
-  const stream = HuggingFaceStream(response)
+  const result = await response.json()
 
-  // Respond with the stream
-  return new StreamingTextResponse(stream)
+  // Extract the model response
+  const text = result?.data?.[0] || '⚠️ No response from model.'
+
+  return new Response(text, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  })
 }
