@@ -11,14 +11,12 @@ export async function POST(req: Request) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-      // ✅ REMOVE Authorization header – not needed and may break Hugging Face Space call
     },
-    body: JSON.stringify({ message: prompt })  // ✅ Match your Gradio client input
+    body: JSON.stringify({ message: prompt })  // ✅ match Hugging Face input
   })
 
   const result = await response.json()
 
-  // ✅ Handle response
   const text = result?.data ?? result?.message ?? '⚠️ No response from model.'
 
   return new Response(text, {
