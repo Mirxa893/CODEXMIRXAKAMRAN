@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n')
 
   // Send the prompt to your Hugging Face Space
-  const response = await fetch('https://mirxakamran893-logiqcurve-wordpress-bot.hf.space/gradio_api/run/predict', {
+  const response = await fetch('https://mirxakamran893-logiqcurve-wordpress-bot.hf.space/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
