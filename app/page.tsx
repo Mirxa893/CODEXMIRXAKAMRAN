@@ -13,7 +13,7 @@ export default function Chat() {
     .filter((m) => m.role === 'assistant')
     .slice(-1)[0]
 
-  // Reset typing animation on new assistant message
+  // Typing animation for last assistant message
   useEffect(() => {
     if (!latestAIMessage) return
 
@@ -22,7 +22,7 @@ export default function Chat() {
       const parsed = JSON.parse(latestAIMessage.content)
       if (parsed && parsed.content) content = parsed.content
     } catch {
-      // not JSON
+      // Not JSON
     }
 
     setDisplayedText('')
@@ -42,9 +42,9 @@ export default function Chat() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 text-white">
       {/* Header */}
-      <div className="flex items-center px-4 py-3 bg-opacity-80 backdrop-blur-lg">
+      <div className="flex items-center px-4 py-3 bg-opacity-80 backdrop-blur-lg border-b border-gray-700">
         <div className="w-full flex items-center justify-between">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white truncate flex items-center">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold truncate flex items-center">
             CODEX MIRXA KAMRAN
           </h2>
           <a
@@ -54,7 +54,7 @@ export default function Chat() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 md:w-10 md:h-10 ml-2 fill-current text-dark-400 hover:text-gray-500"
+              className="w-8 h-8 md:w-10 md:h-10 ml-2 fill-current hover:text-gray-400"
               viewBox="0 0 20 20"
             >
               <path
@@ -68,36 +68,34 @@ export default function Chat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-6 overflow-y-auto">
         <div className="flex flex-col space-y-4">
-          {messages.map((m, index) => {
+          {messages.map((m) => {
             let content = m.content
             try {
               const parsed = JSON.parse(m.content)
               if (parsed && parsed.content) content = parsed.content
             } catch {
-              // not JSON
+              // Not JSON
             }
 
             const isLastAI = m.role === 'assistant' && m.id === latestAIMessage?.id
 
             return (
-              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={m.id} className="flex">
                 <div
-                  className={`p-4 rounded-lg ${
+                  className={`p-4 rounded-2xl break-words max-w-[80%] ${
                     m.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-right w-40 lg:w-2/5'
-                      : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white self-end ml-auto'
+                      : 'bg-gradient-to-br from-amber-200 via-violet-600 to-sky-900 text-white self-start mr-auto'
                   }`}
                 >
-                  <div>
-                    <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{' '}
-                    {isLastAI ? (
-                      <span>{displayedText}<span className="animate-pulse">▍</span></span>
-                    ) : (
-                      <span>{content}</span>
-                    )}
-                  </div>
+                  <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}:</span>{' '}
+                  {isLastAI ? (
+                    <span>{displayedText}<span className="animate-pulse">▍</span></span>
+                  ) : (
+                    <span>{content}</span>
+                  )}
                 </div>
               </div>
             )
@@ -106,9 +104,12 @@ export default function Chat() {
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="flex items-center px-4 py-3 bg-gray-800">
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center px-4 py-3 bg-gray-800 border-t border-gray-700"
+      >
         <input
-          className="flex-1 px-4 py-2 text-white bg-gray-700 bg-opacity-60 border rounded-full placeholder-white::placeholder focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+          className="flex-1 px-4 py-2 text-white bg-gray-700 bg-opacity-60 border border-gray-600 rounded-full placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
           type="text"
           placeholder="Say something..."
           value={input}
@@ -116,7 +117,7 @@ export default function Chat() {
         />
         <button
           type="submit"
-          className="ml-4 p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="ml-3 p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <svg
             className="w-6 h-6"
