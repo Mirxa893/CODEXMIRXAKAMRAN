@@ -1,9 +1,28 @@
 'use client'
 
 import { useChat } from 'ai/react'
+import { useEffect, useState } from 'react'
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat()
+  const [displayedMessage, setDisplayedMessage] = useState('')
+  const lastMessage = messages[messages.length - 1]
+
+  useEffect(() => {
+    if (lastMessage?.role === 'assistant') {
+      let index = 0
+      const content = lastMessage.content
+      setDisplayedMessage('') // reset
+
+      const interval = setInterval(() => {
+        setDisplayedMessage((prev) => prev + content.charAt(index))
+        index++
+        if (index >= content.length) clearInterval(interval)
+      }, 25)
+
+      return () => clearInterval(interval)
+    }
+  }, [lastMessage])
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 text-white">
@@ -36,35 +55,38 @@ export default function Chat() {
       {/* Chat Messages */}
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="flex flex-col space-y-4">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
+          {messages.map((m, i) => {
+            const isAI = m.role === 'assistant'
+            const showTyping = isAI && i === messages.length - 1
+            const content = (() => {
+              try {
+                const parsed = JSON.parse(m.content)
+                return parsed?.content || m.content
+              } catch {
+                return m.content
+              }
+            })()
+
+            return (
               <div
-                className={`p-4 rounded-lg ${
-                  m.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-right w-40 lg:w-2/5'
-                    : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
-                }`}
+                key={m.id}
+                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {(() => {
-                  let content = m.content
-                  try {
-                    const parsed = JSON.parse(m.content)
-                    if (parsed && parsed.content) content = parsed.content
-                  } catch (e) {
-                    // Not JSON, use raw
-                  }
-                  return (
-                    <div>
-                      <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>: {content}
-                    </div>
-                  )
-                })()}
+                <div
+                  className={`p-4 rounded-lg ${
+                    m.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-right w-40 lg:w-2/5'
+                      : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
+                  }`}
+                >
+                  <div>
+                    <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{' '}
+                    {showTyping ? displayedMessage : content}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
