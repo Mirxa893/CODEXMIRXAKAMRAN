@@ -1,12 +1,10 @@
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const { messages } = await req.json();
 
-  // Format messages into a single prompt
-  const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n')
+  const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n');
 
-  // Call your Hugging Face Space API
   const response = await fetch('https://mirxakamran893-LOGIQCURVECHATIQBOT.hf.space/chat', {
     method: 'POST',
     headers: {
@@ -16,13 +14,17 @@ export async function POST(req: Request) {
       message: prompt,
       history: []
     })
-  })
+  });
 
-  const text = await response.text()
+  const data = await response.json(); // parse JSON instead of text
 
-  return new Response(text, {
-    headers: {
-      'Content-Type': 'text/plain'
+  return new Response(
+    JSON.stringify({
+      role: 'assistant',
+      content: data.response || 'No response'
+    }),
+    {
+      headers: { 'Content-Type': 'application/json' }
     }
-  })
+  );
 }
