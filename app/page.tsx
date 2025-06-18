@@ -2,7 +2,6 @@
 
 import { useChat } from 'ai/react'
 import { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
@@ -71,7 +70,7 @@ export default function Chat() {
       {/* Messages */}
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="flex flex-col space-y-4">
-          {messages.map((m) => {
+          {messages.map((m, index) => {
             let content = m.content
             try {
               const parsed = JSON.parse(m.content)
@@ -83,26 +82,21 @@ export default function Chat() {
             const isLastAI = m.role === 'assistant' && m.id === latestAIMessage?.id
 
             return (
-              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={m.id} className={flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}}>
                 <div
-                  className={`p-4 rounded-lg ${
+                  className={p-4 rounded-lg ${
                     m.role === 'user'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-right w-40 lg:w-2/5'
                       : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
-                  }`}
+                  }}
                 >
                   <div>
                     <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{' '}
                     {isLastAI ? (
-                      <ReactMarkdown className="prose prose-invert text-white mt-2">
-                        {displayedText}
-                      </ReactMarkdown>
+                      <span>{displayedText}<span className="animate-pulse">▍</span></span>
                     ) : (
-                      <ReactMarkdown className="prose prose-invert text-white mt-2">
-                        {content}
-                      </ReactMarkdown>
+                      <span>{content}</span>
                     )}
-                    {isLastAI && <span className="animate-pulse">▍</span>}
                   </div>
                 </div>
               </div>
