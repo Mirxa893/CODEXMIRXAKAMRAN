@@ -2,6 +2,7 @@
 
 import { useChat } from 'ai/react'
 import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
@@ -70,7 +71,7 @@ export default function Chat() {
       {/* Messages */}
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="flex flex-col space-y-4">
-          {messages.map((m, index) => {
+          {messages.map((m) => {
             let content = m.content
             try {
               const parsed = JSON.parse(m.content)
@@ -93,10 +94,15 @@ export default function Chat() {
                   <div>
                     <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{' '}
                     {isLastAI ? (
-                      <span>{displayedText}<span className="animate-pulse">▍</span></span>
+                      <ReactMarkdown className="prose prose-invert text-white mt-2">
+                        {displayedText}
+                      </ReactMarkdown>
                     ) : (
-                      <span>{content}</span>
+                      <ReactMarkdown className="prose prose-invert text-white mt-2">
+                        {content}
+                      </ReactMarkdown>
                     )}
+                    {isLastAI && <span className="animate-pulse">▍</span>}
                   </div>
                 </div>
               </div>
