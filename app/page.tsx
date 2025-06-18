@@ -43,7 +43,7 @@ export default function Chat() {
       <div className="flex items-center px-4 py-3 bg-opacity-80 backdrop-blur-lg border-b border-gray-700">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold truncate flex items-center">
-            CODEX MIRXA KAMRAN
+            LOGIQ CURVE LLC
           </h2>
           <a
             href="https://github.com/Mirxa893/CODEXMIRXAKAMRAN"
