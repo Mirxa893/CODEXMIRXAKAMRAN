@@ -1,9 +1,22 @@
 'use client'
 
 import { useChat } from 'ai/react'
+import { useEffect, useRef } from 'react'
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat()
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading
+  } = useChat()
+
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isLoading])
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 text-white">
@@ -14,7 +27,7 @@ export default function Chat() {
             CODEX MIRXA KAMRAN
           </h2>
           <a
-            href="https://github.com/ElonMusk2002/chat-huggingface"
+            href="https://github.com/Mirxa893/CODEXMIRXAKAMRAN"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -49,19 +62,26 @@ export default function Chat() {
                 }`}
               >
                 <div className="rounded-lg">
-                  <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{" "}
-                  {(() => {
-                    try {
-                      const parsed = JSON.parse(m.content);
-                      return parsed.content || m.content;
-                    } catch {
-                      return m.content;
-                    }
-                  })()}
+                  <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>: {m.content}
                 </div>
               </div>
             </div>
           ))}
+
+          {/* Typing Indicator */}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="p-4 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 rounded-lg text-left w-40 lg:w-2/5">
+                <div className="flex space-x-1 animate-pulse">
+                  <div className="w-2 h-2 bg-white rounded-full" />
+                  <div className="w-2 h-2 bg-white rounded-full" />
+                  <div className="w-2 h-2 bg-white rounded-full" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
         </div>
       </div>
 
@@ -74,6 +94,7 @@ export default function Chat() {
           value={input}
           onChange={handleInputChange}
         />
+
         <button
           type="submit"
           className="ml-4 p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
