@@ -82,13 +82,13 @@ export default function Chat() {
             const isLastAI = m.role === 'assistant' && m.id === latestAIMessage?.id
 
             return (
-              <div key={m.id} className={flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}}>
+              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
-                  className={p-4 rounded-lg ${
+                  className={`p-4 rounded-lg ${
                     m.role === 'user'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-right w-40 lg:w-2/5'
                       : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
-                  }}
+                  }`}
                 >
                   <div>
                     <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>:{' '}
