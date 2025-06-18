@@ -13,7 +13,7 @@ export default function Chat() {
     .filter((m) => m.role === 'assistant')
     .slice(-1)[0]
 
-  // Typing animation for last assistant message
+  // Typing animation
   useEffect(() => {
     if (!latestAIMessage) return
 
@@ -21,9 +21,7 @@ export default function Chat() {
     try {
       const parsed = JSON.parse(latestAIMessage.content)
       if (parsed && parsed.content) content = parsed.content
-    } catch {
-      // Not JSON
-    }
+    } catch {}
 
     setDisplayedText('')
     setTypingIndex(0)
@@ -40,7 +38,7 @@ export default function Chat() {
   }, [latestAIMessage?.id])
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 text-white">
+    <div className="flex flex-col h-screen w-full max-w-screen overflow-hidden bg-gradient-to-b from-gray-800 to-gray-900 text-white">
       {/* Header */}
       <div className="flex items-center px-4 py-3 bg-opacity-80 backdrop-blur-lg border-b border-gray-700">
         <div className="w-full flex items-center justify-between">
@@ -68,23 +66,21 @@ export default function Chat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 md:p-6 overflow-y-auto">
+      <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[calc(100vh-150px)]">
         <div className="flex flex-col space-y-4">
           {messages.map((m) => {
             let content = m.content
             try {
               const parsed = JSON.parse(m.content)
               if (parsed && parsed.content) content = parsed.content
-            } catch {
-              // Not JSON
-            }
+            } catch {}
 
             const isLastAI = m.role === 'assistant' && m.id === latestAIMessage?.id
 
             return (
               <div key={m.id} className="flex">
                 <div
-                  className={`p-4 rounded-2xl break-words max-w-[80%] ${
+                  className={`p-4 rounded-2xl break-words w-fit max-w-[85%] sm:max-w-[80%] ${
                     m.role === 'user'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white self-end ml-auto'
                       : 'bg-gradient-to-br from-amber-200 via-violet-600 to-sky-900 text-white self-start mr-auto'
@@ -106,10 +102,10 @@ export default function Chat() {
       {/* Input */}
       <form
         onSubmit={handleSubmit}
-        className="flex items-center px-4 py-3 bg-gray-800 border-t border-gray-700"
+        className="flex items-center px-3 py-2 bg-gray-800 border-t border-gray-700 space-x-2"
       >
         <input
-          className="flex-1 px-4 py-2 text-white bg-gray-700 bg-opacity-60 border border-gray-600 rounded-full placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+          className="flex-1 px-3 py-2 text-sm sm:text-base text-white bg-gray-700 border border-gray-600 rounded-full placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           placeholder="Say something..."
           value={input}
@@ -117,10 +113,10 @@ export default function Chat() {
         />
         <button
           type="submit"
-          className="ml-3 p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <svg
-            className="w-6 h-6"
+            className="w-5 h-5 sm:w-6 sm:h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
