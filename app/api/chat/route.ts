@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n')
 
   // Call your Hugging Face Space API
-  const response = await fetch('https://mirxakamran893-logiqcurve-wordpress-bot.hf.space//chat', {
+  const response = await fetch('https://mirxakamran893-LOGIQCURVECHATIQBOT.hf.space/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
