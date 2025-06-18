@@ -48,9 +48,20 @@ export default function Chat() {
                     : 'bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 text-left w-40 lg:w-2/5'
                 }`}
               >
-                <div className="rounded-lg">
-                  <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>: {m.content}
-                </div>
+                {(() => {
+                  let content = m.content
+                  try {
+                    const parsed = JSON.parse(m.content)
+                    if (parsed && parsed.content) content = parsed.content
+                  } catch (e) {
+                    // Not JSON, use raw
+                  }
+                  return (
+                    <div>
+                      <span className="font-medium">{m.role === 'user' ? 'You' : 'AI'}</span>: {content}
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           ))}
@@ -66,7 +77,6 @@ export default function Chat() {
           value={input}
           onChange={handleInputChange}
         />
-
         <button
           type="submit"
           className="ml-4 p-2 text-blue-400 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -86,7 +96,6 @@ export default function Chat() {
             />
           </svg>
         </button>
-
         {messages.length > 0 && (
           <a
             href="https://github.com/Mirxa893/CODEXMIRXAKAMRAN"
