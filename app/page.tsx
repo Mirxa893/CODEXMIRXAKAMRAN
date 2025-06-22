@@ -121,7 +121,7 @@ export default function Chat() {
         className="flex items-center px-3 py-2 bg-gray-800 border-t border-gray-700 space-x-2"
       >
         <input
-          className="flex-1 px-3 py-2 text-sm sm:text-base text-white bg-gray-700 border border-gray-600 rounded-full placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`flex-1 px-3 py-2 text-sm sm:text-base ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'} border border-gray-600 rounded-full placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500`}
           type="text"
           placeholder="Say something..."
           value={input}
