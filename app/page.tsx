@@ -51,33 +51,22 @@ export default function Chat() {
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold truncate flex items-center">
             LOGIQ CURVE LLC
           </h2>
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {theme === 'dark' ? (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1M12 20v1m4.22-4.22l.707.707m-4.95-4.95l.707.707m-5.65-.22a9 9 0 1 1 9.19-9.19m-4.22 4.22a3 3 0 1 0-4.24-4.24m-1.41 1.41a1 1 0 1 1 1.42 1.42m.95-3.29a4.01 4.01 0 0 1 5.63 5.63M16 10a3 3 0 1 0-3-3m-7 3a3 3 0 1 0 3-3m4.5-5.5l-.707-.707" />
-              </svg>
-            ) : (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-              </svg>
-            )}
-          </button>
+          {/* Theme Toggle Switch */}
+          <label htmlFor="theme-toggle" className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                id="theme-toggle"
+                className="hidden"
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+              />
+              <div className="w-12 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+              <div
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out ${theme === 'dark' ? 'transform translate-x-6' : ''}`}
+              ></div>
+            </div>
+          </label>
         </div>
       </div>
 
