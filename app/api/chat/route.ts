@@ -5,7 +5,7 @@ export async function POST(req: Request) {
 
   const prompt = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n');
 
-  const response = await fetch('https://mirxakamran893-LOGIQCURVECHATIQBOT.hf.space/chat', {
+  const response = await fetch('https://mirxakamran893-codexmknew.hf.space/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
